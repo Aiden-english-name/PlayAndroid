@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/head_portrait"
                 android:layout_width="match_parent"
                 android:layout_height="159dp"
                 android:contentDescription="TODO"
@@ -33,19 +33,19 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView"
-                android:textColor="@color/black"
                 android:layout_width="348dp"
-                android:textStyle="bold"
-                android:gravity="center_horizontal"
                 android:layout_height="94dp"
-                android:padding="10dp"
                 android:background="@color/white"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
                 android:paddingLeft="10dp"
                 android:text="TextView"
-                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+                app:layout_constraintTop_toBottomOf="@+id/head_portrait" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
