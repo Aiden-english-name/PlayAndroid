@@ -75,7 +75,8 @@ android:layout_marginBottom="5dp"
                         app:layout_constraintHorizontal_bias="0.29"
                         app:layout_constraintStart_toEndOf="@+id/chapterName"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/sanjiaoxing_3" />
+                        app:srcCompat="@drawable/sanjiaoxing_3"
+                        android:contentDescription="TODO" />
 
                     <LinearLayout
 
@@ -164,7 +165,8 @@ android:layout_marginBottom="5dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/fenlei"
-                        tools:ignore="DuplicateIds" />
+                        tools:ignore="DuplicateIds"
+                        android:contentDescription="TODO" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -191,7 +193,8 @@ android:layout_marginBottom="5dp"
             android:layout_height="67dp"
             android:layout_gravity="right"
             android:layout_marginTop="13dp"
-            android:src="@drawable/icon_card_selected" />
+            android:src="@drawable/icon_card_selected"
+            android:contentDescription="TODO" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie"

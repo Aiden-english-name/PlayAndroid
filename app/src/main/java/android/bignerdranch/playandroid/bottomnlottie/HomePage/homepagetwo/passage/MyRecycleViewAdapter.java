@@ -1,7 +1,6 @@
 package android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.passage;
 
 import android.app.Activity;
-import android.bignerdranch.playandroid.MainActivity;
 import android.bignerdranch.playandroid.R;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -10,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

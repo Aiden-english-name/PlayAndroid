@@ -1,58 +1,24 @@
-package android.bignerdranch.playandroid;
+package android.bignerdranch.playandroid.bottomnlottie.HomePage;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.bignerdranch.playandroid.bottomnlottie.CategoryFragment;
-import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.banner.BannerData;
-import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.banner.DataBeen;
-import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.banner.MyBannerAdapter;
-import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.passage.MyRecycleViewAdapter;
-import android.bignerdranch.playandroid.bottomnlottie.HomePageFragment;
-import android.bignerdranch.playandroid.bottomnlottie.MineFragment;
-import android.bignerdranch.playandroid.net.OkHttpCallbackListener;
-import android.bignerdranch.playandroid.net.OkHttpUtil;
-import android.content.Context;
+import android.bignerdranch.playandroid.R;
+import android.bignerdranch.playandroid.bottomnlottie.HomePage.CategoryFragment.CategoryFragment;
+import android.bignerdranch.playandroid.bottomnlottie.HomePage.HomeFragment.HomePageFragment;
+import android.bignerdranch.playandroid.bottomnlottie.HomePage.MyFragment.MineFragment;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.gson.Gson;
-import com.scwang.smart.refresh.footer.ClassicsFooter;
-import com.scwang.smart.refresh.header.ClassicsHeader;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
-import com.youth.banner.Banner;
-import com.youth.banner.indicator.CircleIndicator;
-import com.youth.banner.transformer.ZoomOutPageTransformer;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class Homepage extends AppCompatActivity implements View.OnClickListener{
 
     //底部导航动画
     public LottieAnimationView tabHomePage;
@@ -69,12 +35,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Fragment homePageFragment;
     Fragment categoryFragment;
     Fragment mineFragment;
-    private FragmentManager mManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.home_page);
         initView();
 
     }
@@ -114,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         categoryFragment = new CategoryFragment();
         mineFragment = new MineFragment();
         changeFragment(homePageFragment);
-
-
 
     }
 
@@ -217,8 +181,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //切换碎片
     public void changeFragment(Fragment fragment){
-        mManager = getSupportFragmentManager();
-        FragmentTransaction transaction = mManager.beginTransaction();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragment,fragment);
         transaction.addToBackStack("");
         transaction.commit();

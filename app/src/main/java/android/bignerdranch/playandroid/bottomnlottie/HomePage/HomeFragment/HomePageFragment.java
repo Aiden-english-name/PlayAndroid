@@ -1,17 +1,20 @@
-package android.bignerdranch.playandroid.bottomnlottie;
+package android.bignerdranch.playandroid.bottomnlottie.HomePage.HomeFragment;
 
 
-import android.app.Activity;
-import android.bignerdranch.playandroid.MainActivity;
+import android.bignerdranch.playandroid.bottomnlottie.HomePage.Homepage;
 import android.bignerdranch.playandroid.bottomnlottie.HomePage.PoetBeen;
+import android.bignerdranch.playandroid.bottomnlottie.HomePage.SystemFragment.SystemAdapter;
+import android.bignerdranch.playandroid.bottomnlottie.HomePage.SystemFragment.SystemBean;
+
 import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.banner.BannerData;
 import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.banner.DataBeen;
 import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.banner.MyBannerAdapter;
 import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.passage.MyRecycleViewAdapter;
 import android.bignerdranch.playandroid.bottomnlottie.HomePage.homepagetwo.passage.PassageBean;
+import android.bignerdranch.playandroid.bottomnlottie.search.SearchActivity;
 import android.bignerdranch.playandroid.net.OkHttpCallbackListener;
 import android.bignerdranch.playandroid.net.OkHttpUtil;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -19,10 +22,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -30,15 +36,15 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.bignerdranch.playandroid.R;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -52,7 +58,6 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
-import com.youth.banner.config.BannerConfig;
 import com.youth.banner.config.IndicatorConfig;
 import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.transformer.ZoomOutPageTransformer;
@@ -80,7 +85,7 @@ public class HomePageFragment extends Fragment {
     List<DataBeen> mDataBeans =new ArrayList<>();
     List<BannerData.DataBean> bannerDates;
     private Banner mBanner;
-    private static final String TAG = "Hello";
+    private static final String TAG = "HomePageFragment";
 
     //下拉刷新
     SmartRefreshLayout refreshLayout;
@@ -134,15 +139,52 @@ public class HomePageFragment extends Fragment {
             if(message.what == 3){
                 initRecycleView();
             }
+            if(message.what == 4){
+                isGainDate = true;
+            }if(message.what == 5){
+                if(isGainDate == true&&isCreateSystem == false){
+                    createTwoClass();
+                    isCreateSystem = true;
+                }
+
+            }
 
             
 
             return true;
         }
     });
+
+    boolean isGainDate = false;
+    boolean isCreateSystem = false;
+
+    List<String> mList2 = new ArrayList<>();
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private SystemBean mBean;
+
+    private void createTwoClass() {
+
+        for(int i = 0;i<mList.size();i++){
+            if(mList.get(i).length()==4) {
+                mList2.add(mList.get(i));
+
+            }
+
+        }
+        RecyclerView recyclerView = mSystemView.findViewById(R.id.system_recyclerview);
+        SystemAdapter adapter = new SystemAdapter(getContext(),mList2,mBean);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        LayoutAnimationController controller = new LayoutAnimationController(AnimationUtils.loadAnimation(getActivity(),R.anim.system_son));
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.setAdapter(adapter);
+        recyclerView.scrollToPosition(0);
+    }
+
     MyAdapter myAdapter = new MyAdapter();
     private RecyclerView mRecyclerView;
     private LottieAnimationView mLottieAnimationView;
+    private List<String> mList = new ArrayList<>();
 
 
     private void initRecycleView() {
@@ -156,39 +198,40 @@ public class HomePageFragment extends Fragment {
 
     }
     private View mBannerView;
+    private View mSystemView;
 
     public int i =0;
     public void jumpPassage(){
         NestedScrollView nestedScrollView = mBannerView.findViewById(R.id.nestedScrollView);
-        ((MainActivity)getActivity()).tabHomePage.setOnClickListener(new View.OnClickListener() {
+        ((Homepage)getActivity()).tabHomePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).setSelected(R.id.home_page,"#FFC13B");
-                ((MainActivity)getActivity()).setUnSelected(1);
-                ((MainActivity)getActivity()).changeFragment(((MainActivity)getActivity()).homePageFragment);
+                ((Homepage)getActivity()).setSelected(R.id.home_page,"#FFC13B");
+                ((Homepage)getActivity()).setUnSelected(1);
+                ((Homepage)getActivity()).changeFragment(((Homepage)getActivity()).homePageFragment);
                 refreshLayout.autoRefresh();
                 nestedScrollView.fling(0);
                 nestedScrollView.smoothScrollTo(0,0);
             }
         });
 
-        ((MainActivity)getActivity()).tabHomePage.setOnClickListener(new View.OnClickListener() {
+        ((Homepage)getActivity()).tabHomePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).setSelected(R.id.home_page,"#FFC13B");
-                ((MainActivity)getActivity()).setUnSelected(1);
-                ((MainActivity)getActivity()).changeFragment(((MainActivity)getActivity()).homePageFragment);
+                ((Homepage)getActivity()).setSelected(R.id.home_page,"#FFC13B");
+                ((Homepage)getActivity()).setUnSelected(1);
+                ((Homepage)getActivity()).changeFragment(((Homepage)getActivity()).homePageFragment);
                 refreshLayout.autoRefresh();
                 nestedScrollView.fling(0);
                 nestedScrollView.smoothScrollTo(0,0);
             }
         });
-        ((MainActivity)getActivity()).homePageLayout.setOnClickListener(new View.OnClickListener() {
+        ((Homepage)getActivity()).homePageLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).setSelected(R.id.home_page,"#FFC13B");
-                ((MainActivity)getActivity()).setUnSelected(1);
-                ((MainActivity)getActivity()).changeFragment(((MainActivity)getActivity()).homePageFragment);
+                ((Homepage)getActivity()).setSelected(R.id.home_page,"#FFC13B");
+                ((Homepage)getActivity()).setUnSelected(1);
+                ((Homepage)getActivity()).changeFragment(((Homepage)getActivity()).homePageFragment);
 
             }
         });
@@ -223,6 +266,20 @@ public class HomePageFragment extends Fragment {
 
 
         jumpPassage();
+
+        //搜索页
+        jumpSearch();
+    }
+
+    private void jumpSearch() {
+        CardView cardView = view.findViewById(R.id.toolbar_card_view);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent  = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initSmartRefreshLayout() {
@@ -251,7 +308,7 @@ public class HomePageFragment extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.d("hello", "onFailure: 连接失败");
+
             }
 
             @Override
@@ -262,7 +319,7 @@ public class HomePageFragment extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Log.d(TAG, date);
+
                 parseDateWithGson(date);
             }
         });
@@ -282,7 +339,7 @@ public class HomePageFragment extends Fragment {
             mLimitedBeans.add(mDatesBeans.get(i));
         }
         count += 10;
-        Log.d(TAG, "itemCount = " + itemCount + "///" + "page = " + page + "formerCount = " + formerCount);
+
         Message message = new Message();
         message.what = 3;
         handler.sendMessage(message);
@@ -325,7 +382,7 @@ public class HomePageFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.ViewHolder holder, int position) {
-            Log.d(TAG, "" + position);
+
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "YangRegular.ttf");
             holder.title.setTypeface(typeface);
             holder.title.setText(mLimitedBeans.get(position).getTitle());
@@ -395,6 +452,29 @@ public class HomePageFragment extends Fragment {
         gainBannerData();
         createSmartRefreshLayout();
 
+        //创建二级分类
+        OkHttpUtil.sendRequestWithOkHttp("https://www.wanandroid.com/tree/json", new OkHttpCallbackListener() {
+            @Override
+            public void finish(String response) {
+
+                mBean = new Gson().fromJson(response,SystemBean.class);
+
+                for(int i = 0; i < mBean.getData().size(); i++){
+
+                    mList.add(mBean.getData().get(i).getName());
+
+                }
+                Message message = new Message();
+                message.what = 4;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
         return view;
     }
 
@@ -411,21 +491,45 @@ public class HomePageFragment extends Fragment {
 
     //顶部导航栏
     private void createTabLayout() {
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        ViewPager viewPager = view.findViewById(R.id.view_pager);
+        mTabLayout = view.findViewById(R.id.tabLayout);
+        mViewPager = view.findViewById(R.id.view_pager);
         for(int i = 0;i<tabs.length;i++){
-            tabLayout.addTab(tabLayout.newTab().setText(tabs[i]));
+            mTabLayout.addTab(mTabLayout.newTab().setText(tabs[i]));
         }
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(position == 1&&isGainDate == true){
+                    Message message = new Message();
+                    message.what = 5;
+                    handler.sendMessage(message);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         mBannerView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_home_page_two,null);
         mTabFragmentList.add(mBannerView);
-        mTabFragmentList.add(View.inflate(getContext(),R.layout.fragment_system,null));
+
+
+        mSystemView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_system,null);
+
+        mTabFragmentList.add(mSystemView);
         mTabFragmentList.add(View.inflate(getContext(),R.layout.fragment_navigation,null));
 
 
 
 
-        viewPager.setAdapter(new PagerAdapter() {
+        mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
                 return mTabFragmentList.size();
@@ -444,9 +548,9 @@ public class HomePageFragment extends Fragment {
                 return view;
             }
 
-            @Override
-            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                View view = mTabFragmentList.get(position%mTabFragmentList.size());
+                @Override
+                public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                    View view = mTabFragmentList.get(position%mTabFragmentList.size());
                 ((ViewPager)container).removeView(view);
             }
 
@@ -454,11 +558,12 @@ public class HomePageFragment extends Fragment {
             @Override
             public CharSequence getPageTitle(int position) {
 
-                return tabs[position%mTabFragmentList.size()];
+                return tabs[position%
+                        mTabFragmentList.size()];
             }
         });
 
-        tabLayout.setupWithViewPager(viewPager,false);
+        mTabLayout.setupWithViewPager(mViewPager,false);
     }
 
     //banner
@@ -480,7 +585,7 @@ public class HomePageFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 e.printStackTrace();
-                Log.d(TAG, "连接失败");
+
             }
         });
 
@@ -539,19 +644,19 @@ public class HomePageFragment extends Fragment {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Log.d(TAG, "请求失败");
+
                         }
 
                         @Override
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             String responseDate = response.body().string();
-                            Log.d(TAG, responseDate);
+
                             showResponse(responseDate);
                         }
                     });
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.d(TAG, "连接失败");
+
                 }
             }
         }).start();

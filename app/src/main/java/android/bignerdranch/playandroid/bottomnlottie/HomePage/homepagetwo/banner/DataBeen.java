@@ -15,6 +15,7 @@ public class DataBeen {
 
     public String getUrl(){
         return url;
+
     }
 
 
